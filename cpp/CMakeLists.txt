@@ -1,0 +1,18 @@
+cmake_minimum_required(VERSION 3.10)
+project(NerualNetwork)
+
+# Set C++ standard
+set(CMAKE_CXX_STANDARD 20)
+set(CMAKE_CXX_STANDARD_REQUIRED True)
+set(CMAKE_EXPORT_COMPILE_COMMANDS ON)
+set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -fsanitize=address -g")
+set(CMAKE_LINKER_FLAGS "${CMAKE_LINKER_FLAGS} -fsanitize=address")
+
+
+add_executable(main
+    main.cc
+    matrix.cc
+    linear.cc
+    bias.cc
+)
+target_compile_options(main PRIVATE -Wall -Werror -Wpedantic)
