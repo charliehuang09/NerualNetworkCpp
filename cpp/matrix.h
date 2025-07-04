@@ -1,8 +1,8 @@
 #pragma once
 #include <cassert>
 #include <cstdio>
-namespace Matrix {
 
+namespace Matrix {
 typedef struct Dimension {
   int col;
   int row;
@@ -12,7 +12,7 @@ typedef struct Dimension {
 } dimension_t;
 
 // https://numpy.org/doc/stable/dev/internals.html
-class Matrix {
+template <typename T> class Matrix {
 
 private:
   float *data;
@@ -27,8 +27,8 @@ public:
   Matrix(dimension_t shape);
   Matrix(const Matrix &other);
   Matrix(Matrix &&other) noexcept;
-  Matrix &operator=(const Matrix &other);
-  Matrix &operator=(Matrix &&other);
+  Matrix<T> &operator=(const Matrix<T> &other);
+  Matrix<T> &operator=(Matrix<T> &&other);
 
   void Transpose();
   void Print();
@@ -129,10 +129,12 @@ public:
     }
   }
 };
+template <typename T> void MatMul(Matrix<T> &a, Matrix<T> &b, Matrix<T> &out);
+template <typename T> void Add(Matrix<T> &a, Matrix<T> &b, Matrix<T> &out);
+template <typename T> void Subtract(Matrix<T> &a, Matrix<T> &b, Matrix<T> &out);
+template <typename T> void Multiply(Matrix<T> &a, Matrix<T> &b, Matrix<T> &out);
+template <typename T> void Square(Matrix<T> &a, Matrix<T> &out);
 
-void MatMul(Matrix &a, Matrix &b, Matrix &out);
-void Add(Matrix &a, Matrix &b, Matrix &out);
-void Subtract(Matrix &a, Matrix &b, Matrix &out);
-void Multiply(Matrix &a, Matrix &b, Matrix &out);
-void Square(Matrix &a, Matrix &out);
 } // namespace Matrix
+
+#include "matrix.tcc"

@@ -1,7 +1,6 @@
 #include "bias.h"
 #include "linear.h"
 #include "matrix.h"
-#include <algorithm>
 #include <array>
 #include <cstdio>
 
@@ -11,23 +10,24 @@
 #define LR 0.01
 #define M 0.3
 #define B 1
+#define PRECISION double
 int main() {
-  std::array<Matrix::Matrix, SAMPLES> X;
-  std::array<Matrix::Matrix, SAMPLES> Y;
+  std::array<Matrix::Matrix<PRECISION>, SAMPLES> X;
+  std::array<Matrix::Matrix<PRECISION>, SAMPLES> Y;
   for (int i = 0; i < SAMPLES; i++) {
-    X[i] = Matrix::Matrix({.col = 1, .row = 1});
+    X[i] = Matrix::Matrix<PRECISION>({.col = 1, .row = 1});
     X[i].FillRand(-1, 1);
     Y[i] = Matrix::Matrix(X[i]);
     Y[i].Multiply(M);
     Y[i].Add(B);
   }
 
-  Model::Linear w1(1, 10);
-  Model::Bias b1(10);
-  Model::Linear w2(10, 10);
-  Model::Bias b2(10);
-  Model::Linear w3(10, 1);
-  Model::Bias b3(1);
+  Model::Linear<PRECISION> w1(1, 10);
+  Model::Bias<PRECISION> b1(10);
+  Model::Linear<PRECISION> w2(10, 10);
+  Model::Bias<PRECISION> b2(10);
+  Model::Linear<PRECISION> w3(10, 1);
+  Model::Bias<PRECISION> b3(1);
 
   w1.InitParam();
   w2.InitParam();
@@ -37,13 +37,13 @@ int main() {
   b2.InitParam();
   b3.InitParam();
 
-  Matrix::Matrix loss({.col = 1, .row = 1});
+  Matrix::Matrix<PRECISION> loss({.col = 1, .row = 1});
 
   for (int epoch = 0; epoch < EPOCHS; epoch++) {
-    float total_loss = 0;
+    PRECISION total_loss = 0;
     for (int i = 0; i < SAMPLES; i++) {
-      Matrix::Matrix *x = &X[i];
-      Matrix::Matrix *y = &Y[i];
+      Matrix::Matrix<PRECISION> *x = &X[i];
+      Matrix::Matrix<PRECISION> *y = &Y[i];
 
       w1.Forward(x);
       b1.Forward(w1.Activation());

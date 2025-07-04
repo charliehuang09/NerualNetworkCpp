@@ -1,15 +1,15 @@
 #pragma once
 #include "matrix.h"
 namespace Model {
-class Layer {
+template <typename T> class Layer {
 public:
-  virtual void Forward(Matrix::Matrix *input) = 0;
-  virtual void Backward(Matrix::Matrix *previous_activation,
-                        Matrix::Matrix *next_derrivative) = 0;
+  virtual void Forward(Matrix::Matrix<T> *input) = 0;
+  virtual void Backward(Matrix::Matrix<T> *previous_activation,
+                        Matrix::Matrix<T> *next_derrivative) = 0;
 
   virtual void ApplyDerrivative() = 0;
   virtual void ApplyLearningRate(float lr) = 0;
-  virtual Matrix::Matrix *Activation() = 0;
-  virtual Matrix::Matrix *Derrivative() = 0;
+  virtual Matrix::Matrix<T> *Activation() = 0;
+  virtual Matrix::Matrix<T> *Derrivative() = 0;
 };
 } // namespace Model

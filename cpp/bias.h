@@ -1,23 +1,26 @@
+#pragma once
 #include "layer.h"
 namespace Model {
 
-class Bias : Model::Layer {
+template <typename T> class Bias : Model::Layer<T> {
 private:
   int size;
-  Matrix::Matrix bias;
-  Matrix::Matrix activation;
-  Matrix::Matrix *derrivative;
+  Matrix::Matrix<T> bias;
+  Matrix::Matrix<T> activation;
+  Matrix::Matrix<T> *derrivative;
 
 public:
   Bias(int size);
   void InitParam();
-  void Forward(Matrix::Matrix *input) override;
-  void Backward(Matrix::Matrix *previous_activation,
-                Matrix::Matrix *next_derrivative) override;
+  void Forward(Matrix::Matrix<T> *input) override;
+  void Backward(Matrix::Matrix<T> *previous_activation,
+                Matrix::Matrix<T> *next_derrivative) override;
   void ApplyDerrivative() override;
   void ApplyLearningRate(float lr) override;
-  Matrix::Matrix *Activation() override { return &activation; }
-  Matrix::Matrix *Derrivative() override { return derrivative; }
+  Matrix::Matrix<T> *Activation() override { return &activation; }
+  Matrix::Matrix<T> *Derrivative() override { return derrivative; }
 };
 
 } // namespace Model
+
+#include "bias.tcc"
