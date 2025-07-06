@@ -15,7 +15,7 @@ typedef struct Dimension {
 template <typename T> class Matrix {
 
 private:
-  float *data;
+  T *data;
 
 public:
   int size;
@@ -35,53 +35,53 @@ public:
   void FillZero();
   void FillRand(float min, float max);
 
-  constexpr float Get(int col, int row) const {
+  constexpr T Get(int col, int row) const {
     return data[col * stride.col + row * stride.row];
   }
 
-  inline void Set(int col, int row, float value) {
+  inline void Set(int col, int row, T value) {
     data[col * stride.col + row * stride.row] = value;
   }
 
-  constexpr float Get(int idx) const { return data[idx]; }
+  constexpr T Get(int idx) const { return data[idx]; }
 
-  inline void Set(int idx, float value) { data[idx] = value; }
+  inline void Set(int idx, T value) { data[idx] = value; }
 
-  inline void Add(int col, int row, float value) {
+  inline void Add(int col, int row, T value) {
     data[col * stride.col + row * stride.row] += value;
   }
 
-  inline void Subtract(int col, int row, float value) {
+  inline void Subtract(int col, int row, T value) {
     data[col * stride.col + row * stride.row] -= value;
   }
 
-  inline void Multiply(int col, int row, float value) {
+  inline void Multiply(int col, int row, T value) {
     data[col * stride.col + row * stride.row] *= value;
   }
 
-  inline void Divide(int col, int row, float value) {
+  inline void Divide(int col, int row, T value) {
     data[col * stride.col + row * stride.row] /= value;
   }
 
-  inline void Add(float value) {
+  inline void Add(T value) {
     for (int i = 0; i < size; i++) {
       data[i] += value;
     }
   }
 
-  inline void Subtract(float value) {
+  inline void Subtract(T value) {
     for (int i = 0; i < size; i++) {
       data[i] -= value;
     }
   }
 
-  inline void Multiply(float value) {
+  inline void Multiply(T value) {
     for (int i = 0; i < size; i++) {
       data[i] *= value;
     }
   }
 
-  inline void Divide(float value) {
+  inline void Divide(T value) {
     for (int i = 0; i < size; i++) {
       data[i] /= value;
     }

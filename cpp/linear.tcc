@@ -15,19 +15,25 @@ Linear<T>::Linear(int in_size, int out_size)
 
 template <typename T> void Linear<T>::InitParam() { weights.FillRand(-1, 1); }
 
-template <typename T> void Linear<T>::Forward(Matrix::Matrix<T> *input) {
-  Matrix::MatMul(weights, *input, activation);
+template <typename T> void Linear<T>::InitParam(T min, T max) {
+  weights.FillRand(min, max);
+}
+
+template <typename T> void Linear<T>::Print() { weights.Print(); }
+
+template <typename T> void Linear<T>::Forward(Matrix::Matrix<T> &input) {
+  Matrix::MatMul(weights, input, activation);
 }
 
 template <typename T>
-void Linear<T>::Backward(Matrix::Matrix<T> *previous_activation,
-                         Matrix::Matrix<T> *next_derrivative) {
-  previous_activation->Transpose();
-  Matrix::MatMul(*next_derrivative, *previous_activation, derrivative);
-  previous_activation->Transpose();
+void Linear<T>::Backward(Matrix::Matrix<T> &previous_activation,
+                         Matrix::Matrix<T> &next_derrivative) {
+  previous_activation.Transpose();
+  Matrix::MatMul(next_derrivative, previous_activation, derrivative);
+  previous_activation.Transpose();
 
   weights.Transpose();
-  Matrix::MatMul(weights, *next_derrivative, input_derrivative);
+  Matrix::MatMul(weights, next_derrivative, input_derrivative);
   weights.Transpose();
 }
 

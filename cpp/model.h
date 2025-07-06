@@ -1,12 +1,26 @@
+#pragma once
 #include "layer.h"
+#include <memory>
+#include <vector>
 namespace Model {
 
-class Model {
+template <typename T> class Model {
+
 public:
   Model();
-  void Forward();
-  void Backward();
+  void Add(std::unique_ptr<Layer<T>> layer);
+  void InitWeights();
+  void Print();
+  void Forward(Matrix::Matrix<T> &x);
+  Matrix::Matrix<T> *Output();
+  void Backward(Matrix ::Matrix<T> &loss_derrivative, Matrix ::Matrix<T> &x);
+  void UpdateParams(float lr);
+
+  const std::unique_ptr<Layer<T>> &operator[](size_t index) const;
 
 private:
+  std::vector<std::unique_ptr<Layer<T>>> m_layers;
 };
 } // namespace Model
+
+#include "model.tcc"

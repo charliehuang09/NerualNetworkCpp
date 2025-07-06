@@ -1,91 +1,122 @@
 #include "bias.h"
 #include "linear.h"
 #include "matrix.h"
+#include "model.h"
 #include <array>
 #include <cstdio>
+#include <memory>
+#include <ostream>
 
-#define SAMPLES 1
+#define SAMPLES 10
 #define EPOCHS 10
 #define LOG_FREQ 1
-#define LR 0.01
+#define LR 0.1
 #define M 0.3
-#define B 1
-#define PRECISION double
+#define B 0
+#define PRECISION float
 int main() {
   std::array<Matrix::Matrix<PRECISION>, SAMPLES> X;
   std::array<Matrix::Matrix<PRECISION>, SAMPLES> Y;
   for (int i = 0; i < SAMPLES; i++) {
     X[i] = Matrix::Matrix<PRECISION>({.col = 1, .row = 1});
     X[i].FillRand(-1, 1);
+    X[i].Set(0, 1);
     Y[i] = Matrix::Matrix(X[i]);
     Y[i].Multiply(M);
     Y[i].Add(B);
   }
 
-  Model::Linear<PRECISION> w1(1, 10);
-  Model::Bias<PRECISION> b1(10);
-  Model::Linear<PRECISION> w2(10, 10);
-  Model::Bias<PRECISION> b2(10);
-  Model::Linear<PRECISION> w3(10, 1);
-  Model::Bias<PRECISION> b3(1);
+  Model::Model<PRECISION> model;
 
-  w1.InitParam();
-  w2.InitParam();
-  w3.InitParam();
+  model.Add(std::make_unique<Model::Linear<PRECISION>>(1, 10));
+  model.Add(std::make_unique<Model::Bias<PRECISION>>(10));
 
-  b1.InitParam();
-  b2.InitParam();
-  b3.InitParam();
+  model.Add(std::make_unique<Model::Linear<PRECISION>>(10, 10));
+  model.Add(std::make_unique<Model::Bias<PRECISION>>(10));
 
-  Matrix::Matrix<PRECISION> loss({.col = 1, .row = 1});
+  model.Add(std::make_unique<Model::Linear<PRECISION>>(10, 10));
+  model.Add(std::make_unique<Model::Bias<PRECISION>>(10));
+
+  model.Add(std::make_unique<Model::Linear<PRECISION>>(10, 10));
+  model.Add(std::make_unique<Model::Bias<PRECISION>>(10));
+
+  model.Add(std::make_unique<Model::Linear<PRECISION>>(10, 10));
+  model.Add(std::make_unique<Model::Bias<PRECISION>>(10));
+
+  model.Add(std::make_unique<Model::Linear<PRECISION>>(10, 10));
+  model.Add(std::make_unique<Model::Bias<PRECISION>>(10));
+
+  model.Add(std::make_unique<Model::Linear<PRECISION>>(10, 10));
+  model.Add(std::make_unique<Model::Bias<PRECISION>>(10));
+
+  model.Add(std::make_unique<Model::Linear<PRECISION>>(10, 10));
+  model.Add(std::make_unique<Model::Bias<PRECISION>>(10));
+
+  model.Add(std::make_unique<Model::Linear<PRECISION>>(10, 1));
+  model.Add(std::make_unique<Model::Bias<PRECISION>>(1));
+
+  model.InitWeights();
+
+  Matrix::Matrix<PRECISION> loss_derrivative({.col = 1, .row = 1});
 
   for (int epoch = 0; epoch < EPOCHS; epoch++) {
     PRECISION total_loss = 0;
     for (int i = 0; i < SAMPLES; i++) {
-      Matrix::Matrix<PRECISION> *x = &X[i];
-      Matrix::Matrix<PRECISION> *y = &Y[i];
+      model.Forward(X[i]);
 
-      w1.Forward(x);
-      b1.Forward(w1.Activation());
+      Matrix::Subtract(Y[i], *model.Output(), loss_derrivative);
+      total_loss += loss_derrivative.Get(0) * loss_derrivative.Get(0) * 0.5;
 
-      w2.Forward(b1.Activation());
-      b2.Forward(w2.Activation());
-
-      w3.Forward(b2.Activation());
-      b3.Forward(w3.Activation());
-
-      Matrix::Subtract(*y, *b3.Activation(), loss);
-      total_loss += loss.Get(0) * loss.Get(0) * 0.5;
-
-      b3.Backward(w3.Activation(), &loss);
-      w3.Backward(b2.Activation(), b3.Derrivative());
-
-      b2.Backward(w2.Activation(), w3.Derrivative());
-      w2.Backward(w1.Activation(), w3.Derrivative());
-
-      b1.Backward(w1.Activation(), w2.Derrivative());
-      w1.Backward(x, w2.Derrivative());
-
-      w3.ApplyLearningRate(LR);
-      w2.ApplyLearningRate(LR);
-      w1.ApplyLearningRate(LR);
-
-      b3.ApplyLearningRate(LR);
-      b2.ApplyLearningRate(LR);
-      b1.ApplyLearningRate(LR);
-
-      w3.ApplyDerrivative();
-      w2.ApplyDerrivative();
-      w1.ApplyDerrivative();
-
-      b3.ApplyDerrivative();
-      b2.ApplyDerrivative();
-      b1.ApplyDerrivative();
+      model.Backward(loss_derrivative, X[i]);
+      model.UpdateParams(LR);
     }
     if (epoch % LOG_FREQ == 0) {
       printf("Epoch: %d Loss: %f\n", epoch, total_loss / SAMPLES);
     }
   }
+  //     Matrix::Matrix<PRECISION> *x = &X[i];
+  //     Matrix::Matrix<PRECISION> *y = &Y[i];
+  //
+  //     w1.Forward(x);
+  //     b1.Forward(w1.Activation());
+  //
+  //     w2.Forward(b1.Activation());
+  //     b2.Forward(w2.Activation());
+  //
+  //     w3.Forward(b2.Activation());
+  //     b3.Forward(w3.Activation());
+  //
+  //     Matrix::Subtract(*y, *b3.Activation(), loss);
+  //     total_loss += loss.Get(0) * loss.Get(0) * 0.5;
+  //
+  //     b3.Backward(w3.Activation(), &loss);
+  //     w3.Backward(b2.Activation(), b3.Derrivative());
+  //
+  //     b2.Backward(w2.Activation(), w3.Derrivative());
+  //     w2.Backward(w1.Activation(), w3.Derrivative());
+  //
+  //     b1.Backward(w1.Activation(), w2.Derrivative());
+  //     w1.Backward(x, w2.Derrivative());
+  //
+  //     w3.ApplyLearningRate(LR);
+  //     w2.ApplyLearningRate(LR);
+  //     w1.ApplyLearningRate(LR);
+  //
+  //     b3.ApplyLearningRate(LR);
+  //     b2.ApplyLearningRate(LR);
+  //     b1.ApplyLearningRate(LR);
+  //
+  //     w3.ApplyDerrivative();
+  //     w2.ApplyDerrivative();
+  //     w1.ApplyDerrivative();
+  //
+  //     b3.ApplyDerrivative();
+  //     b2.ApplyDerrivative();
+  //     b1.ApplyDerrivative();
+  //   }
+  //   if (epoch % LOG_FREQ == 0) {
+  //     printf("Epoch: %d Loss: %f\n", epoch, total_loss / SAMPLES);
+  //   }
 }
 
 /*
