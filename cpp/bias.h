@@ -4,10 +4,10 @@ namespace Model {
 
 template <typename T> class Bias : public Layer<T> {
 private:
-  int size;
-  Matrix::Matrix<T> bias;
-  Matrix::Matrix<T> activation;
-  Matrix::Matrix<T> *derrivative;
+  int size_;
+  Matrix::Matrix<T> bias_;
+  Matrix::Matrix<T> activation_;
+  Matrix::Matrix<T> *derrivative_;
 
 public:
   Bias(int size);
@@ -20,8 +20,8 @@ public:
                 Matrix::Matrix<T> &next_derrivative) override;
   void ApplyDerrivative() override;
   void ApplyLearningRate(float lr) override;
-  Matrix::Matrix<T> *Activation() override { return &activation; }
-  Matrix::Matrix<T> *Derrivative() override { return derrivative; }
+  Matrix::Matrix<T> *Activation() override { return &activation_; }
+  Matrix::Matrix<T> *Derrivative() override { return derrivative_; }
 };
 
 } // namespace Model

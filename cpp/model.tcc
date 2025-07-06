@@ -10,69 +10,69 @@
 #include <vector>
 namespace Model {
 
-template <typename T> Model<T>::Model() : m_layers() {}
+template <typename T> Model<T>::Model() : layers_() {}
 
 template <typename T> void Model<T>::Add(std::unique_ptr<Layer<T>> layer) {
-  m_layers.push_back(std::move(layer));
+  layers_.push_back(std::move(layer));
 }
 
 template <typename T> void Model<T>::InitWeights() {
-  for (std::unique_ptr<Layer<T>> &layer : m_layers) {
+  for (std::unique_ptr<Layer<T>> &layer : layers_) {
     layer->InitParam();
   }
 }
 
 template <typename T> void Model<T>::Print() {
-  for (std::unique_ptr<Layer<T>> &layer : m_layers) {
+  for (std::unique_ptr<Layer<T>> &layer : layers_) {
     layer->Print();
   }
 }
 
 template <typename T> void Model<T>::Forward(Matrix::Matrix<T> &x) {
   assert(x.size > 0);
-  assert(m_layers.size() > 0);
-  m_layers[0]->Forward(x);
-  for (size_t i = 1; i < m_layers.size(); i++) {
-    m_layers[i]->Forward(*m_layers[i - 1]->Activation());
+  assert(layers_.size() > 0);
+  layers_[0]->Forward(x);
+  for (size_t i = 1; i < layers_.size(); i++) {
+    layers_[i]->Forward(*layers_[i - 1]->Activation());
   }
 }
 
 template <typename T> Matrix::Matrix<T> *Model<T>::Output() {
-  return m_layers.back().get()->Activation();
+  return layers_.back().get()->Activation();
 }
 
 template <typename T>
 void Model<T>::Backward(Matrix::Matrix<T> &loss_derrivative,
                         Matrix::Matrix<T> &x) {
-  assert(m_layers.size() != 0);
+  assert(layers_.size() != 0);
 
-  if (m_layers.size() == 1) {
-    m_layers[m_layers.size() - 1]->Backward(x, loss_derrivative);
+  if (layers_.size() == 1) {
+    layers_[layers_.size() - 1]->Backward(x, loss_derrivative);
     return;
   }
 
-  m_layers[m_layers.size() - 1]->Backward(
-      *m_layers[m_layers.size() - 2]->Activation(), loss_derrivative);
-  for (int i = m_layers.size() - 2; i >= 1; i--) {
-    m_layers[i]->Backward(*m_layers[i - 1]->Activation(),
-                          *m_layers[i + 1]->Derrivative());
+  layers_[layers_.size() - 1]->Backward(
+      *layers_[layers_.size() - 2]->Activation(), loss_derrivative);
+  for (int i = layers_.size() - 2; i >= 1; i--) {
+    layers_[i]->Backward(*layers_[i - 1]->Activation(),
+                         *layers_[i + 1]->Derrivative());
   }
 
-  m_layers[0]->Backward(x, *m_layers[1]->Derrivative());
+  layers_[0]->Backward(x, *layers_[1]->Derrivative());
 }
 
 template <typename T> void Model<T>::UpdateParams(float lr) {
-  for (std::unique_ptr<Layer<T>> &layer : m_layers) {
+  for (std::unique_ptr<Layer<T>> &layer : layers_) {
     layer->ApplyLearningRate(lr);
   }
-  for (std::unique_ptr<Layer<T>> &layer : m_layers) {
+  for (std::unique_ptr<Layer<T>> &layer : layers_) {
     layer->ApplyDerrivative();
   }
 }
 
 template <typename T>
 const std::unique_ptr<Layer<T>> &Model<T>::operator[](size_t index) const {
-  return m_layers[index];
+  return layers_[index];
 }
 
 } // namespace Model

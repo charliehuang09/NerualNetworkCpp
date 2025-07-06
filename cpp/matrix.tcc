@@ -13,17 +13,17 @@
 namespace Matrix {
 template <typename T>
 Matrix<T>::Matrix()
-    : data(nullptr), size(0), shape({.col = 0, .row = 0}),
+    : data_(nullptr), size(0), shape({.col = 0, .row = 0}),
       stride{.col = 0, .row = 0} {}
 
 template <typename T>
 Matrix<T>::Matrix(dimension_t shape)
-    : data(new T[shape.col * shape.row]{}), size(shape.col * shape.row),
+    : data_(new T[shape.col * shape.row]{}), size(shape.col * shape.row),
       shape(shape), stride{.col = shape.row, .row = 1} {}
 
 template <typename T>
 Matrix<T>::Matrix(const Matrix &other)
-    : data(new T[other.shape.col * other.shape.row]{}),
+    : data_(new T[other.shape.col * other.shape.row]{}),
       size(other.shape.col * other.shape.row), shape(other.shape),
       stride(other.stride) {
   for (int i = 0; i < size; i++) {
@@ -33,9 +33,9 @@ Matrix<T>::Matrix(const Matrix &other)
 
 template <typename T>
 Matrix<T>::Matrix(Matrix &&other) noexcept
-    : data(other.data), size(other.size), shape(other.shape),
+    : data_(other.data_), size(other.size), shape(other.shape),
       stride(other.stride) {
-  other.data = nullptr;
+  other.data_ = nullptr;
   other.size = 0;
   other.shape = {.col = 0, .row = 0};
   other.stride = {.col = 0, .row = 0};
@@ -43,10 +43,10 @@ Matrix<T>::Matrix(Matrix &&other) noexcept
 
 template <typename T> Matrix<T> &Matrix<T>::operator=(const Matrix<T> &other) {
   if (this != &other) {
-    delete[] data;
-    data = new T[other.size];
+    delete[] data_;
+    data_ = new T[other.size];
     for (int i = 0; i < other.size; i++) {
-      data[i] = other.Get(i);
+      data_[i] = other.Get(i);
     }
     size = other.size;
     shape = other.shape;
@@ -57,13 +57,13 @@ template <typename T> Matrix<T> &Matrix<T>::operator=(const Matrix<T> &other) {
 
 template <typename T> Matrix<T> &Matrix<T>::operator=(Matrix<T> &&other) {
   if (this != &other) {
-    delete[] data;
-    data = other.data;
+    delete[] data_;
+    data_ = other.data_;
     size = other.size;
     shape = other.shape;
     stride = other.stride;
 
-    other.data = nullptr;
+    other.data_ = nullptr;
     other.size = 0;
     other.shape = {.col = 0, .row = 0};
     other.stride = {.col = 0, .row = 0};
@@ -89,7 +89,7 @@ template <typename T> void Matrix<T>::Transpose() {
 }
 
 template <typename T> void Matrix<T>::FillZero() {
-  std::memset(data, 0, size * sizeof(T));
+  std::memset(data_, 0, size * sizeof(T));
 }
 
 // Probably want a better way to generate random numbers

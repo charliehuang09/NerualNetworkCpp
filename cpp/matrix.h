@@ -15,7 +15,7 @@ typedef struct Dimension {
 template <typename T> class Matrix {
 
 private:
-  T *data;
+  T *data_;
 
 public:
   int size;
@@ -23,7 +23,7 @@ public:
   dimension_t stride; // TODO offset?
 
   Matrix();
-  ~Matrix() { delete[] data; }
+  ~Matrix() { delete[] data_; }
   Matrix(dimension_t shape);
   Matrix(const Matrix &other);
   Matrix(Matrix &&other) noexcept;
@@ -36,54 +36,54 @@ public:
   void FillRand(float min, float max);
 
   constexpr T Get(int col, int row) const {
-    return data[col * stride.col + row * stride.row];
+    return data_[col * stride.col + row * stride.row];
   }
 
   inline void Set(int col, int row, T value) {
-    data[col * stride.col + row * stride.row] = value;
+    data_[col * stride.col + row * stride.row] = value;
   }
 
-  constexpr T Get(int idx) const { return data[idx]; }
+  constexpr T Get(int idx) const { return data_[idx]; }
 
-  inline void Set(int idx, T value) { data[idx] = value; }
+  inline void Set(int idx, T value) { data_[idx] = value; }
 
   inline void Add(int col, int row, T value) {
-    data[col * stride.col + row * stride.row] += value;
+    data_[col * stride.col + row * stride.row] += value;
   }
 
   inline void Subtract(int col, int row, T value) {
-    data[col * stride.col + row * stride.row] -= value;
+    data_[col * stride.col + row * stride.row] -= value;
   }
 
   inline void Multiply(int col, int row, T value) {
-    data[col * stride.col + row * stride.row] *= value;
+    data_[col * stride.col + row * stride.row] *= value;
   }
 
   inline void Divide(int col, int row, T value) {
-    data[col * stride.col + row * stride.row] /= value;
+    data_[col * stride.col + row * stride.row] /= value;
   }
 
   inline void Add(T value) {
     for (int i = 0; i < size; i++) {
-      data[i] += value;
+      data_[i] += value;
     }
   }
 
   inline void Subtract(T value) {
     for (int i = 0; i < size; i++) {
-      data[i] -= value;
+      data_[i] -= value;
     }
   }
 
   inline void Multiply(T value) {
     for (int i = 0; i < size; i++) {
-      data[i] *= value;
+      data_[i] *= value;
     }
   }
 
   inline void Divide(T value) {
     for (int i = 0; i < size; i++) {
-      data[i] /= value;
+      data_[i] /= value;
     }
   }
 
@@ -125,7 +125,7 @@ public:
 
   inline void Square() {
     for (int i = 0; i < size; i++) {
-      data[i] *= data[i];
+      data_[i] *= data_[i];
     }
   }
 };

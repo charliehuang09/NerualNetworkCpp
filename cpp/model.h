@@ -19,7 +19,7 @@ public:
   const std::unique_ptr<Layer<T>> &operator[](size_t index) const;
 
 private:
-  std::vector<std::unique_ptr<Layer<T>>> m_layers;
+  std::vector<std::unique_ptr<Layer<T>>> layers_;
 };
 } // namespace Model
 

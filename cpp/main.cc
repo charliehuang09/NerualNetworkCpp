@@ -10,7 +10,7 @@
 #define SAMPLES 10
 #define EPOCHS 10
 #define LOG_FREQ 1
-#define LR 0.1
+#define LR 0.01
 #define M 0.3
 #define B 0
 #define PRECISION float
@@ -29,24 +29,6 @@ int main() {
   Model::Model<PRECISION> model;
 
   model.Add(std::make_unique<Model::Linear<PRECISION>>(1, 10));
-  model.Add(std::make_unique<Model::Bias<PRECISION>>(10));
-
-  model.Add(std::make_unique<Model::Linear<PRECISION>>(10, 10));
-  model.Add(std::make_unique<Model::Bias<PRECISION>>(10));
-
-  model.Add(std::make_unique<Model::Linear<PRECISION>>(10, 10));
-  model.Add(std::make_unique<Model::Bias<PRECISION>>(10));
-
-  model.Add(std::make_unique<Model::Linear<PRECISION>>(10, 10));
-  model.Add(std::make_unique<Model::Bias<PRECISION>>(10));
-
-  model.Add(std::make_unique<Model::Linear<PRECISION>>(10, 10));
-  model.Add(std::make_unique<Model::Bias<PRECISION>>(10));
-
-  model.Add(std::make_unique<Model::Linear<PRECISION>>(10, 10));
-  model.Add(std::make_unique<Model::Bias<PRECISION>>(10));
-
-  model.Add(std::make_unique<Model::Linear<PRECISION>>(10, 10));
   model.Add(std::make_unique<Model::Bias<PRECISION>>(10));
 
   model.Add(std::make_unique<Model::Linear<PRECISION>>(10, 10));

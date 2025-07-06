@@ -4,12 +4,12 @@ namespace Model {
 
 template <typename T> class Linear : public Layer<T> {
 private:
-  int in_size;
-  int out_size;
-  Matrix::Matrix<T> weights;
-  Matrix::Matrix<T> activation;
-  Matrix::Matrix<T> derrivative;
-  Matrix::Matrix<T> input_derrivative;
+  int in_size_;
+  int out_size_;
+  Matrix::Matrix<T> weights_;
+  Matrix::Matrix<T> activation_;
+  Matrix::Matrix<T> derrivative_;
+  Matrix::Matrix<T> input_derrivative_;
 
 public:
   Linear(int in_size, int out_size);
@@ -22,8 +22,8 @@ public:
                 Matrix::Matrix<T> &next_derrivative) override;
   void ApplyDerrivative() override;
   void ApplyLearningRate(float lr) override;
-  Matrix::Matrix<T> *Activation() override { return &activation; }
-  Matrix::Matrix<T> *Derrivative() override { return &input_derrivative; }
+  Matrix::Matrix<T> *Activation() override { return &activation_; }
+  Matrix::Matrix<T> *Derrivative() override { return &input_derrivative_; }
 };
 } // namespace Model
 
