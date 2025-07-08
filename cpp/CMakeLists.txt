@@ -11,5 +11,11 @@ set(CMAKE_LINKER_FLAGS "${CMAKE_LINKER_FLAGS} -fsanitize=address")
 
 add_executable(main
     main.cc
+    mnist.cc
 )
 target_compile_options(main PRIVATE -Wall -Werror -Wpedantic)
+
+add_executable(benchmark
+    benchmark.cc
+    mnist.cc
+)

@@ -11,6 +11,7 @@ public:
   Model();
   void Add(std::unique_ptr<Layer<T>> layer);
   void InitWeights();
+  void InitWeights(T min, T max);
   void Print();
   void Forward(Matrix::Matrix<T> &x);
   Matrix::Matrix<T> *Output();

@@ -16,7 +16,7 @@ public:
   Linear(int in_size, int out_size);
   ~Linear() = default;
   void InitParam() override;
-  void InitParam(T min, T max);
+  void InitParam(T min, T max) override;
   void Print() override;
   void Forward(Matrix::Matrix<T> &input) override;
   void Backward(Matrix::Matrix<T> &previous_activation,

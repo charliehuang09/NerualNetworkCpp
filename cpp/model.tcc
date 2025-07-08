@@ -22,6 +22,12 @@ template <typename T> void Model<T>::InitWeights() {
   }
 }
 
+template <typename T> void Model<T>::InitWeights(T min, T max) {
+  for (std::unique_ptr<Layer<T>> &layer : layers_) {
+    layer->InitParam(min, max);
+  }
+}
+
 template <typename T> void Model<T>::Print() {
   for (std::unique_ptr<Layer<T>> &layer : layers_) {
     layer->Print();

@@ -7,6 +7,7 @@ template <typename T> class Layer {
 public:
   virtual ~Layer() = default;
   virtual void InitParam() = 0;
+  virtual void InitParam(T min, T max) = 0;
   virtual void Print() = 0;
   virtual void Forward(Matrix::Matrix<T> &input) = 0;
   virtual void Backward(Matrix::Matrix<T> &previous_activation,

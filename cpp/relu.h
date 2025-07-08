@@ -13,7 +13,7 @@ public:
   ReLU(int out_size);
   ~ReLU() = default;
   void InitParam() override;
-  void InitParam(T min, T max);
+  void InitParam(T min, T max) override;
   void Print() override;
   void Forward(Matrix::Matrix<T> &input) override;
   void Backward(Matrix::Matrix<T> &previous_activation,
