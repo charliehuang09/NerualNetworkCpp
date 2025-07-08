@@ -28,14 +28,6 @@ int main() {
   model.Add(std::make_unique<Model::ReLU<PRECISION>>(10));
 
   model.Add(std::make_unique<Model::Linear<PRECISION>>(10, 10));
-  model.Add(std::make_unique<Model::Bias<PRECISION>>(10));
-  model.Add(std::make_unique<Model::ReLU<PRECISION>>(10));
-
-  model.Add(std::make_unique<Model::Linear<PRECISION>>(10, 10));
-  model.Add(std::make_unique<Model::Bias<PRECISION>>(10));
-  model.Add(std::make_unique<Model::ReLU<PRECISION>>(10));
-
-  model.Add(std::make_unique<Model::Linear<PRECISION>>(10, 10));
   model.Add(std::make_unique<Model::ReLU<PRECISION>>(10));
   model.Add(std::make_unique<Model::Bias<PRECISION>>(10));
 

@@ -109,64 +109,43 @@ template <typename T> void Matrix<T>::FillRand(float min, float max) {
 
 template <typename T> void MatMul(Matrix<T> &a, Matrix<T> &b, Matrix<T> &out) {
   out.FillZero();
-  if (a.shape.row != b.shape.col) {
-    printf("Assertion failed: a->shape.row != b->shape.col\n");
-    printf("Shape of a: (%d, %d)\n", a.shape.row, a.shape.col);
-    printf("Shape of b: (%d, %d)\n", b.shape.row, b.shape.col);
-    std::cout << std::endl;
-    std::abort();
-  }
-  if (!(out.shape == dimension_t{.col = a.shape.col, .row = b.shape.row})) {
-    printf("Outshape is not correct");
-    printf("Shape of a: (%d, %d)\n", a.shape.row, a.shape.col);
-    printf("Shape of b: (%d, %d)\n", b.shape.row, b.shape.col);
-    printf("Shape of out: (%d, %d)\n", out.shape.row, out.shape.col);
-    std::cout << std::endl;
-    std::abort();
-  }
   for (int i = 0; i < a.shape.col; i++) {
     for (int k = 0; k < a.shape.row; k++) {
+      T aik = a.Get(i, k);
       for (int j = 0; j < b.shape.row; j++) {
-        out.Add(i, j, a.Get(i, k) * b.Get(k, j));
+        out.Add(i, j, aik * b.Get(k, j));
       }
     }
   }
 }
+
 template <typename T> void Add(Matrix<T> &a, Matrix<T> &b, Matrix<T> &out) {
   assert(a.shape == b.shape && b.shape == out.shape);
-  for (int col = 0; col < a.shape.col; col++) {
-    for (int row = 0; row < a.shape.row; row++) {
-      out.Set(col, row, a.Get(col, row) + b.Get(col, row));
-    }
+  for (int i = 0; i < a.size; i++) {
+    out.Set(i, a.Get(i) + b.Get(i));
   }
 }
 
 template <typename T>
 void Subtract(Matrix<T> &a, Matrix<T> &b, Matrix<T> &out) {
   assert(a.shape == b.shape && b.shape == out.shape);
-  for (int col = 0; col < a.shape.col; col++) {
-    for (int row = 0; row < a.shape.row; row++) {
-      out.Set(col, row, a.Get(col, row) - b.Get(col, row));
-    }
+  for (int i = 0; i < a.size; i++) {
+    out.Set(i, a.Get(i) - b.Get(i));
   }
 }
 template <typename T>
 void Multiply(Matrix<T> &a, Matrix<T> &b, Matrix<T> &out) {
   assert(a.shape == b.shape && b.shape == out.shape);
-  for (int col = 0; col < a.shape.col; col++) {
-    for (int row = 0; row < a.shape.row; row++) {
-      out.Set(col, row, a.Get(col, row) * b.Get(col, row));
-    }
+  for (int i = 0; i < a.size; i++) {
+    out.Set(i, a.Get(i) * b.Get(i));
   }
 }
 
 template <typename T> void Square(Matrix<T> &a, Matrix<T> &out) {
   assert(a.shape == out.shape);
-  for (int col = 0; col < a.shape.col; col++) {
-    for (int row = 0; row < a.shape.row; row++) {
-      T value = a.Get(col, row);
-      out.Set(col, row, value * value);
-    }
+
+  for (int i = 0; i < a.size; i++) {
+    out.Set(i, a.Get(i) * a.Get(i));
   }
 }
 } // namespace Matrix
