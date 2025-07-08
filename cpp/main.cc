@@ -2,10 +2,10 @@
 #include "linear.h"
 #include "matrix.h"
 #include "model.h"
+#include "relu.h"
 #include <array>
 #include <cstdio>
 #include <memory>
-#include <ostream>
 
 #define SAMPLES 10
 #define EPOCHS 10
@@ -30,11 +30,14 @@ int main() {
 
   model.Add(std::make_unique<Model::Linear<PRECISION>>(1, 10));
   model.Add(std::make_unique<Model::Bias<PRECISION>>(10));
+  model.Add(std::make_unique<Model::ReLU<PRECISION>>(10));
 
   model.Add(std::make_unique<Model::Linear<PRECISION>>(10, 10));
   model.Add(std::make_unique<Model::Bias<PRECISION>>(10));
+  model.Add(std::make_unique<Model::ReLU<PRECISION>>(10));
 
   model.Add(std::make_unique<Model::Linear<PRECISION>>(10, 1));
+  model.Add(std::make_unique<Model::ReLU<PRECISION>>(1));
   model.Add(std::make_unique<Model::Bias<PRECISION>>(1));
 
   model.InitWeights();

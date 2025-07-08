@@ -1,6 +1,5 @@
 #pragma once
 #include "bias.h"
-#include "layer.h"
 #include <cstdio>
 #include <cstdlib>
 namespace Model {
