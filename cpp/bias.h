@@ -1,4 +1,5 @@
-#pragma once
+#ifndef BIAS_H
+#define BIAS_H
 #include "layer.h"
 namespace Model {
 
@@ -27,3 +28,5 @@ public:
 } // namespace Model
 
 #include "bias.tcc"
+
+#endif // BIAS_H

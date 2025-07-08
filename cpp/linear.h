@@ -1,4 +1,5 @@
-#pragma once
+#ifndef LINEAR_H
+#define LINEAR_H
 #include "layer.h"
 namespace Model {
 
@@ -28,3 +29,5 @@ public:
 } // namespace Model
 
 #include "linear.tcc"
+
+#endif // LINEAR_H

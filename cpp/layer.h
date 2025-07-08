@@ -1,4 +1,5 @@
-#pragma once
+#ifndef LAYER_H
+#define LAYER_H
 #include "matrix.h"
 namespace Model {
 
@@ -17,3 +18,5 @@ public:
   virtual Matrix::Matrix<T> *Derrivative() = 0;
 };
 } // namespace Model
+
+#endif // LAYER_H

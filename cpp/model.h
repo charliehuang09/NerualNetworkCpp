@@ -1,4 +1,5 @@
-#pragma once
+#ifndef MODEL_H
+#define MODEL_H
 #include "layer.h"
 #include <memory>
 #include <vector>
@@ -24,3 +25,5 @@ private:
 } // namespace Model
 
 #include "model.tcc"
+
+#endif // MODEL_H

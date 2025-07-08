@@ -1,4 +1,5 @@
-#pragma once
+#ifndef MATRIX_H
+#define MATRIX_H
 #include <cassert>
 #include <cstdio>
 
@@ -138,3 +139,5 @@ template <typename T> void Square(Matrix<T> &a, Matrix<T> &out);
 } // namespace Matrix
 
 #include "matrix.tcc"
+
+#endif // MATRIX_H
