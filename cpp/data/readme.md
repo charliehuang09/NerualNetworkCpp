@@ -3,6 +3,3 @@ The format is
 
 Refer to [MNIST in CSV](https://pjreddie.com/projects/mnist-in-csv/)
 
-https://drive.google.com/file/d/1eEKzfmEu6WKdRlohBQiqi3PhW_uIVJVP/view
-
-
