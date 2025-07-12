@@ -16,9 +16,8 @@ typedef struct Dimension {
 template <typename T> class Matrix {
 
 private:
-  T *data_;
-
 public:
+  T *data_;
   int size;
   dimension_t shape;
   dimension_t stride; // TODO offset?
@@ -36,7 +35,7 @@ public:
   void FillZero();
   void FillRand(float min, float max);
 
-  constexpr T Get(int col, int row) const {
+  inline T Get(int col, int row) const {
     return data_[col * stride.col + row * stride.row];
   }
 
@@ -44,7 +43,7 @@ public:
     data_[col * stride.col + row * stride.row] = value;
   }
 
-  constexpr T Get(int idx) const { return data_[idx]; }
+  inline T Get(int idx) const { return data_[idx]; }
 
   inline void Set(int idx, T value) { data_[idx] = value; }
 
