@@ -5,10 +5,10 @@
 std::vector<std::string> splitByComma(const std::string &input) {
   std::vector<std::string> result;
   std::stringstream ss(input);
-  std::string item;
+  std::string item = "";
 
   while (std::getline(ss, item, ',')) {
-    result.push_back(item);
+    result.push_back(item); // Remove whitespace around each item
   }
 
   return result;
@@ -43,6 +43,7 @@ void MNIST::LoadDataset(std::string path) {
 
     data_.push_back({.x = x, .y = y});
   }
+  inputFile.close();
 
   std::printf("Number of samples: %lu\n", data_.size());
   return;

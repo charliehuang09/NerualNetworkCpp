@@ -8,23 +8,27 @@
 #include <cstdio>
 #include <memory>
 
-#define SAMPLES 10
-#define EPOCHS 30
-#define LOG_FREQ 10
+#define EPOCHS 100
+#define LOG_FREQ 1
 #define LR 0.01
 #define PRECISION float
 int main() {
 
-  MNIST dataset;
-  dataset.LoadDataset("data/mnist_test.csv");
+  MNIST train, test;
+  train.LoadDataset("data/mnist_train.csv");
+  test.LoadDataset("data/mnist_test.csv");
 
   Model::Model<PRECISION> model;
 
-  model.Add(std::make_unique<Model::Linear<PRECISION>>(784, 10));
-  model.Add(std::make_unique<Model::Bias<PRECISION>>(10));
-  model.Add(std::make_unique<Model::ReLU<PRECISION>>(10));
+  model.Add(std::make_unique<Model::Linear<PRECISION>>(784, 64));
+  model.Add(std::make_unique<Model::Bias<PRECISION>>(64));
+  model.Add(std::make_unique<Model::ReLU<PRECISION>>(64));
 
-  model.Add(std::make_unique<Model::Linear<PRECISION>>(10, 64));
+  model.Add(std::make_unique<Model::Linear<PRECISION>>(64, 64));
+  model.Add(std::make_unique<Model::Bias<PRECISION>>(64));
+  model.Add(std::make_unique<Model::ReLU<PRECISION>>(64));
+
+  model.Add(std::make_unique<Model::Linear<PRECISION>>(64, 64));
   model.Add(std::make_unique<Model::Bias<PRECISION>>(64));
   model.Add(std::make_unique<Model::ReLU<PRECISION>>(64));
 
@@ -53,8 +57,8 @@ int main() {
 
   for (int epoch = 0; epoch < EPOCHS; epoch++) {
     PRECISION total_loss = 0;
-    for (int i = 0; i < dataset.size(); i++) {
-      sample_t data = dataset[i];
+    for (int i = 0; i < train.size(); i++) {
+      sample_t data = train[i];
       model.Forward(data.x);
 
       Matrix::Subtract(data.y, *model.Output(), loss_derrivative);
@@ -71,14 +75,13 @@ int main() {
     }
 
     if (epoch % LOG_FREQ == 0) {
-      model.Output()->Print();
-      printf("Epoch: %d Loss: %f\n", epoch, total_loss / dataset.size());
+      printf("Epoch: %d Loss: %f\n", epoch, total_loss / train.size());
     }
   }
 
   PRECISION num_right = 0;
-  for (int i = 0; i < dataset.size(); i++) {
-    sample_t data = dataset[i];
+  for (int i = 0; i < test.size(); i++) {
+    sample_t data = test[i];
     model.Forward(data.x);
 
     int max_idx = 0;
@@ -95,5 +98,5 @@ int main() {
     model.Backward(loss_derrivative, data.x);
     model.UpdateParams(LR);
   }
-  printf("Number correct: %f", num_right / dataset.size());
+  printf("Number correct: %f", num_right / train.size());
 }

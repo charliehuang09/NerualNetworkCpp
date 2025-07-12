@@ -109,10 +109,13 @@ template <typename T> void Matrix<T>::FillRand(float min, float max) {
 
 template <typename T> void MatMul(Matrix<T> &a, Matrix<T> &b, Matrix<T> &out) {
   out.FillZero();
-  for (int i = 0; i < a.shape.col; i++) {
-    for (int k = 0; k < a.shape.row; k++) {
+  int i_length = a.shape.col;
+  int j_length = b.shape.row;
+  int k_length = a.shape.row;
+  for (int i = 0; i < i_length; i++) {
+    for (int k = 0; k < k_length; k++) {
       T aik = a.Get(i, k);
-      for (int j = 0; j < b.shape.row; j++) {
+      for (int j = 0; j < j_length; j++) {
         out.Add(i, j, aik * b.Get(k, j));
       }
     }
